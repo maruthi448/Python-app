@@ -1,6 +1,8 @@
-from flask import Flask # Importing Flask to create a web application
-from flask import request # Importing request to handle incoming requests
-from flask import jsonify # Importing jsonify to return JSON responses
+from flask import Flask, request, jsonify  # Importing Flask to create a web application\
+from datetime import datetime  # Importing datetime to get the current time
+import socket  # Importing socket to get the hostname of the machine
+ # Importing request to handle incoming requests
+ # Importing jsonify to return JSON responses
 #from flask import Flask, jsonify
 
 
@@ -11,17 +13,25 @@ app = Flask(__name__) # Creating an instance of the Flask class
 
 @app.route('/api/v1/details') # Defining a route for the root URL
 def details():
-    return "<h1>Hello, World!</h1>"
+    return jsonify ({
+        "message": "Hello, World!",
+        "hostname": socket.gethostname(),
+        "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    })
 # This function returns a simple "Hello, World!" message when the root URL is accessed
-
+@app.route('/api/v1/health')
+def health():
+    return jsonify({
+        "status": "up",
+        "code": 200 
+    })
+@app.route('/api/v1')
+def index():
+    return "<h1>Welcome to the Flask App!</h1>" 
+ # This function returns a welcome message when the root URL is accessed
 
 if __name__ == '__main__':
     app.run(debug=True) # Running the Flask application in debug mode
-
-
-
-
-
 
 
 # Defining a simple route for the root URL
